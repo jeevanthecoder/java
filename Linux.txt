@@ -1,0 +1,27 @@
+Chapter One: Getting Started
+What is an Operating System?
+A computer, complete with all its parts – the CPU, mouse, monitor,
+and keyboard – will not work without a central program that will piece it all
+together. An operating system, or OS, for short is the software that brings
+together a computer’s hardware and the different programs that you want to
+install on it. When you boot up a PC without an OS, you will be directed to
+the command prompt that makes no sense to most computer users. You will
+be unable to watch videos, listen to music, edit photos, or to simply write a
+note.
+An operating system is responsible for doing the following tasks:
+Detect hardware – An OS is responsible for validating the
+components of a computer during boot up (hard drive, CPU,
+network cards, mouse, etc.) and loading the corresponding
+drivers and modules for the hardware to properly run.
+Manage processes – Similar to the way our mind works,
+several processes or applications are running on a computer
+at the same time. It is the OS that is responsible for allocating
+CPU resources. The OS also provides the user the option to
+start, stop, or restart a process.
+Manage memory – Each application needs a specific
+amount of RAM and swap memory to function. The OS is
+responsible for assigning memory allocations and for
+handling memory requests.
+Initiate user interfaces - An OS offers users ways to access
+the system either via a command line or a graphical user
+interface (GUI)

@@ -1,3 +1,5 @@
+import org.sqlite.jdbc3.JDBC3Connection;
+
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -29,12 +31,8 @@ public class Main {
                 DBop.CREATE_DATABASE();
                 System.out.println("Database Created!!!");
             } else if (command_split[i].equals("insert-data")) {
-                String input[] = DBop.CHOOSE_DATABASE().split(",");
-                String DBFileName=input[0];
-                String Directory=input[1];
-                System.out.println("Enter Table name: ");
-                String table = scan.next();
-                DBop.INSERT_DATA(DBFileName,table);
+
+                DBop.INSERT_DATA();
 
 
             } else if (command_split[i].equals("update-operation")) {
@@ -44,16 +42,6 @@ public class Main {
             }else if (command_split[i].equals("print-dbfile")){
                 DBop.PRINT_DBFILE();
                 System.out.println("That's it!!!");
-            }else if(command_split[i].equals("insert-data")){
-                String input[]=DBop.CHOOSE_DATABASE().split(" ");
-                String filename=input[0];
-
-                System.out.println("Enter type of data the table having : (LOGIN-DETAILS or CREDIT-CARD or DEBIT-CARD");
-                String Table= scan.next();
-                DBop.INSERT_DATA(filename,Table);
-
-
-
             }else if(command_split[i].equals("create-database")){
                 DBop.CREATE_DATABASE();
             }else if(command_split[i].equals("create-table")){
@@ -76,10 +64,12 @@ public class Main {
        try(FileReader fr = new FileReader("D:\\Java\\java workspace\\PasswordGenerator\\src\\WHAT_WE_DO.txt")) {
            int i;
            // Holds true till there is nothing to read
-           while ((i = fr.read()) != -1)
+           while ((i = fr.read()) != -1) {
 
                // Print all the content of a file
                System.out.print((char) i);
+           }
+           System.out.println("\nEnter Command : ");
        }catch(Exception e){
            System.out.println(e);
        }
@@ -166,14 +156,23 @@ public class Main {
              password=sb.toString();
              String Directory="D:\\Java\\java workspace\\PasswordGenerator";
              try{
-                 Class.forName("org.sqlite.JDBC");
-                 c = DriverManager.getConnection("jdbc:sqlite:password.db");
-                 c.setAutoCommit(false);
+                 c = DriverManager.getConnection("jdbc:sqlite:"+Directory+"\\" + "password.db");
+
+
                  stmt=c.createStatement();
+
+
+//                 c.setAutoCommit(false);
+
                  System.out.println("Enter AccountName:");
                  String name=scan.next();
-                 String sql = "INSERT INTO PASSWORD (ACCOUNTNAME,PASSWORDS)"+" VALUES("+"'"+name+"','"+password+"');";
-                 stmt.executeUpdate(sql);
+                 stmt.execute("CREATE TABLE IF NOT EXISTS PASSWORD "+
+                         "(ACCOUNTNAME TEXT, PASSWORDS TEXT)");
+                stmt.execute("INSERT INTO 'PASSWORD' ('ACCOUNTNAME', 'PASSWORDS')" + "VALUES('"+name+"','"+password+"')");
+
+                 stmt.close();
+                 c.close();
+
              }catch(Exception e){
                  System.out.println( e);
              }

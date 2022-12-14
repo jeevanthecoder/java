@@ -48,26 +48,27 @@ public class DBOPERATION {
         Connection c;
         Statement stmt;
         System.out.println("Enter the table name you want: ");
-        String tablename= Main.scan.nextLine();
+        String tablename= scan.nextLine();
 
         System.out.println("Which type of data do you want to store?( CREDIT-CARD or DEBIT-CARD or LOGIN-DETAILS)");
-        String data = Main.scan.nextLine();
+        String data = scan.nextLine();
 
         if(!DBFile.isEmpty()) {
             try {
-                Class.forName("org.sqlite.JDBC");
-                c = DriverManager.getConnection("jdbc:sqlite:"+Directory+"\\" + DBFile);
+                c = DriverManager.getConnection("jdbc:sqlite:"+Directory+"\\"+DBFile);
+//                Class.forName("org.sqlite.JDBC");
+//                c = DriverManager.getConnection("jdbc:sqlite:"+Directory+"\\" + DBFile);
 
 
                 if(data.equals("LOGIN-DETAILS")) {
 
                     stmt = c.createStatement();
-                    String sql = "CREATE TABLE " +tablename+
-                            "(ID             TEXT    NOT NULL," +
-                            "ACCOUNTNAME     TEXT    NOT NULL," +
-                            "USERNAME        TEXT    NOT NULL," +
-                            "PASSWORD        TEXT    NOT NULL)";
-                    stmt.executeUpdate(sql);
+//                    String sql = ;
+                    stmt.execute("CREATE TABLE " +tablename+
+                            "(ID             TEXT    ," +
+                            "ACCOUNTNAME     TEXT    ," +
+                            "USERNAME        TEXT    ," +
+                            "PASSWORD        TEXT    )");
                     stmt.close();
                     System.out.println("new table created");
                 }else if(data.equals("CREDIT-CARD")){
@@ -75,12 +76,12 @@ public class DBOPERATION {
                     tablename= scan.nextLine();
 
                     stmt = c.createStatement();
-                    String sql = "CREATE TABLE " +tablename+
-                            "(ID            TEXT     NOT NULL," +
-                            "CARDNUMBER     TEXT    NOT NULL," +
-                            "EXPIRYDATE MM YY       TEXT    NOT NULL," +
-                            "CVV        TEXT    NOT NULL);";
-                    stmt.executeUpdate(sql);
+//                    String sql = ;
+                    stmt.execute("CREATE TABLE " +tablename+
+                            "(ID            TEXT     ," +
+                            "CARDNUMBER     TEXT    ," +
+                            "EXPIRYDATE-MM-YY       TEXT    ," +
+                            "CVV        INTEGER);");
                     stmt.close();
                     System.out.println("new table created!!!");
                 }else if(data.equals("DEBIT-CARD")){
@@ -88,12 +89,12 @@ public class DBOPERATION {
                     tablename= scan.nextLine();
 
                     stmt = c.createStatement();
-                    String sql = "CREATE TABLE " + tablename+
-                            "(ID            TEXT     NOT NULL," +
-                            "CARDNUMBER     TEXT    NOT NULL," +
-                            "EXPIRYDATE MM YY        TEXT    NOT NULL," +
-                            "CVV        TEXT    NOT NULL);";
-                    stmt.executeUpdate(sql);
+//                    String sql = ;
+                    stmt.execute("CREATE TABLE " + tablename+
+                            "(ID            TEXT     ," +
+                            "CARDNUMBER     TEXT    ," +
+                            "EXPIRYDATE MM YY        TEXT," +
+                            "CVV        INTEGER);");
                     stmt.close();
                     System.out.println("new table created!!!");
                 }else{
@@ -109,9 +110,7 @@ public class DBOPERATION {
 
                 }
 
-            } catch (ClassNotFoundException e) {
-                System.out.println(e);
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }else{
@@ -127,16 +126,23 @@ public class DBOPERATION {
         }
     }
 
-    public static void INSERT_DATA(String FileName,String TABLE) {
+    public static void INSERT_DATA() {
+        String input[]=CHOOSE_DATABASE().split(",");
+        String DBFileName=input[0];
+        String DBDirectory=input[1];
+
+        System.out.println("Enter type of data the table having : (LOGIN-DETAILS or CREDIT-CARD or DEBIT-CARD");
+        String TABLE= scan.next();
 
         Scanner scan=new Scanner(System.in);
         Connection c;
         Statement stmt;
 
+
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:" + FileName);
-            c.setAutoCommit(false);
+
+            c = DriverManager.getConnection("jdbc:sqlite:" +DBDirectory+"\\"+DBFileName );
+            c.setAutoCommit(true);
             stmt = c.createStatement();
             if (TABLE.equals("LOGIN-DETAILS")) {
                 String userName, Password, AccountName;
@@ -154,11 +160,12 @@ public class DBOPERATION {
                         userName = scan.next();
                         System.out.println("Password : ");
                         Password = scan.next();
-                        String sql = "INSERT INTO " + TABLENAME + " (ID,ACCOUNTNAME,USERNAME,PASSWORD) " +
-                                "VALUES (" + String.valueOf(i) + ",'" + AccountName + "', '" + userName + "', '" + Password + "')";
-                        stmt.executeUpdate(sql);
-                        System.out.println("Data inserted to table "+TABLENAME);
 
+                        stmt.execute("INSERT INTO " + TABLENAME + " (ID,ACCOUNTNAME,USERNAME,PASSWORD) " +
+                                "VALUES (" + String.valueOf(i) + ",'" + AccountName + "', '" + userName + "', '" + Password + "')");
+                        System.out.println("Data inserted to table "+TABLENAME);
+                        stmt.close();
+                        c.close();
                     }
                 } catch (Exception e) {
                     System.out.println(e);
@@ -174,18 +181,21 @@ public class DBOPERATION {
                 try {
                     for (int i = 0; i < TestCases; i++) {
                         System.out.println("Account " + i + " : ");
-                        System.out.println("AccountName : ");
+                        System.out.println("CARDNUMBER : ");
                         AccountName = scan.next();
-                        System.out.println("Username : ");
+                        System.out.println("EXPIRYDATE : ");
                         userName = scan.next();
-                        System.out.println("Password : ");
+                        System.out.println("CVV : ");
                         Password = scan.next();
-                        String sql = "INSERT INTO " + TABLENAME + " (ID,CARDNUMBER,EXPIRYDATE,CVV) " +
-                                "VALUES (" + String.valueOf(i) + ",'" + AccountName + "', '" + userName + "', '" + Password + "')";
-                        stmt.executeUpdate(sql);
+
+                        stmt.execute("INSERT INTO " + TABLENAME + " (ID,CARDNUMBER,EXPIRYDATE,CVV) " +
+                                "VALUES (" + String.valueOf(i) + ",'" + AccountName + "', '" + userName + "', '" + Password + "')");
 
                         System.out.println("Data inserted to table "+TABLENAME);
                     }
+                    stmt.close();
+                    c.close();
+
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -199,18 +209,21 @@ public class DBOPERATION {
                 try {
                     for (int i = 0; i < TestCases; i++) {
                         System.out.println("Account " + i + " : ");
-                        System.out.println("AccountName : ");
+                        System.out.println("CARDNUMBER : ");
                         AccountName = scan.next();
-                        System.out.println("Username : ");
+                        System.out.println("EXPIRYDATE : ");
                         userName = scan.next();
-                        System.out.println("Password : ");
+                        System.out.println("CVV : ");
                         Password = scan.next();
-                        String sql = "INSERT INTO " + TABLENAME + " (ID,CARDNUMBER,EXPIRYDATE,CVV) " +
-                                "VALUES (" + String.valueOf(i) + ",'" + AccountName + "', '" + userName + "', '" + Password + "')";
-                        stmt.executeUpdate(sql);
+
+                        stmt.execute("INSERT INTO " + TABLENAME + " (ID,CARDNUMBER,EXPIRYDATE,CVV) " +
+                                "VALUES (" + String.valueOf(i) + ",'" + AccountName + "', '" + userName + "', '" + Password + "')");
                         System.out.println("Data inserted to table "+TABLENAME);
 
                     }
+                    stmt.close();
+                    c.close();
+
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -260,15 +273,20 @@ public class DBOPERATION {
     }
 
     public static void UPDATE_OPERATION(){
+        Scanner scan = new Scanner(System.in);
         Connection c;
         Statement stmt;
-        String DBFileName,Table,Data,Data1,updatedata;
-        System.out.println("Enter the DbFilenmae: ");
-        DBFileName=scan.next();
+        String Table,Data,Data1,updatedata;
+        String D = CHOOSE_DATABASE();
+        String Files[]=D.split(",");
+        String DBFileName = Files[0];
+        String DBDirectory = Files[1];
+//        System.out.println("Enter the DbFilename: ");
+//        DBFileName=scan.next();
         System.out.println("Enter the Table Name: ");
-        Table=scan.next();
+        Table=scan.nextLine();
         System.out.println("Enter the Data which the Table stores.(LOGIN-DETAILS or CREDIT-CARD or DEBIT-CARD)");
-        Data=scan.next();
+        Data=scan.nextLine();
         if(Data.equals("LOGIN-DETAILS")){
             boolean flag=false;
             while(flag) {
@@ -279,13 +297,15 @@ public class DBOPERATION {
                 System.out.println("Enter new value of "+updatedata+" : ");
                 Data1= scan.next();
                 try {
-                    Class.forName("org.sqlite.JDBC");
-                    c = DriverManager.getConnection("jdbc:sqlite:"+DBFileName);
-                    c.setAutoCommit(false);
+//                    Class.forName("org.sqlite.JDBC");
+                    c = DriverManager.getConnection("jdbc:sqlite:"+DBDirectory+"\\"+DBFileName);
+                    c.setAutoCommit(true);
                     stmt = c.createStatement();
-                    String sql = "UPDATE "+Table+" set "+updatedata+" = "+Data1+" where ID="+n+";";
-                    stmt.executeUpdate(sql);
-                    c.commit();
+
+                    stmt.execute("UPDATE "+Table+" set "+updatedata+" = "+Data1+" where ID="+n);
+                    stmt.close();
+                    c.close();
+
                 }catch(Exception e){
                     System.out.println(e);
                 }
@@ -308,13 +328,14 @@ public class DBOPERATION {
                 System.out.println("Enter new value of "+updatedata+" : ");
                 Data1= scan.next();
                 try {
-                    Class.forName("org.sqlite.JDBC");
-                    c = DriverManager.getConnection("jdbc:sqlite:"+DBFileName);
-                    c.setAutoCommit(false);
+//                    Class.forName("org.sqlite.JDBC");
+                    c = DriverManager.getConnection("jdbc:sqlite:"+DBDirectory+"\\"+DBFileName);
+                    c.setAutoCommit(true);
                     stmt = c.createStatement();
-                    String sql = "UPDATE "+Table+" set "+updatedata+" = "+Data1+" where ID="+n+";";
-                    stmt.executeUpdate(sql);
-                    c.commit();
+
+                    stmt.execute("UPDATE "+Table+" set "+updatedata+" = "+Data1+" where ID="+n);
+                    stmt.close();
+                    c.close();
                 }catch(Exception e){
                     System.out.println(e);
                 }
@@ -338,13 +359,14 @@ public class DBOPERATION {
                 System.out.println("Enter new value of "+updatedata+" : ");
                 Data1= scan.next();
                 try {
-                    Class.forName("org.sqlite.JDBC");
-                    c = DriverManager.getConnection("jdbc:sqlite:"+DBFileName);
-                    c.setAutoCommit(false);
+//                    Class.forName("org.sqlite.JDBC");
+                    c = DriverManager.getConnection("jdbc:sqlite:"+DBDirectory+"\\"+DBFileName);
+                    c.setAutoCommit(true);
                     stmt = c.createStatement();
-                    String sql = "UPDATE "+Table+" set "+updatedata+" = "+Data1+" where ID="+n+";";
-                    stmt.executeUpdate(sql);
-                    c.commit();
+
+                    stmt.execute("UPDATE "+Table+" set "+updatedata+" = "+Data1+" where ID="+n);
+                    stmt.close();
+                    c.close();
                 }catch(Exception e){
                     System.out.println(e);
                 }
@@ -371,7 +393,7 @@ public class DBOPERATION {
         Statement stmt;
 
         try {
-            Class.forName("org.sqlite.JDBC");
+
             c = DriverManager.getConnection("jdbc:sqlite:" +Directory+"\\"+DBFileName);
             c.setAutoCommit(false);
             stmt =c.createStatement();
@@ -380,8 +402,10 @@ public class DBOPERATION {
             stmt.executeUpdate("."+sql);
             System.out.println("\nEnter the table to print: ");
             String Table = Main.scan.nextLine();
-            String sql1 = "SELECT * FROM " + Table;
-            stmt.executeUpdate(sql1);
+
+            stmt.execute("SELECT * FROM " + Table);
+            stmt.close();
+            c.close();
         } catch (Exception e) {
             System.out.println(e);
         }

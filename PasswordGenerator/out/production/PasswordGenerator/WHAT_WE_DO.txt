@@ -1,0 +1,23 @@
+HELLO WELCOME!!!
+THIS PROGRAM DOES BELOW TASKS:
+1.GENERATE PASSWORD.
+2.SAVE YOUR LOGIN DETAILS, CREDIT-CARD DETAILS, 
+DEBIT-CARD DETAILS.
+3.CREATES YOUR OWN DATABASE FILE.
+4.CREATES NEW TABLES IN THE DATABASE FILE YOU CREATED.
+5.UPDATES THE DATABASE FILE YOU CREATED.
+
+LIST OF COMMANDS:
+1. generate-password
+2. create-database
+3. insert-data
+4. update-operation
+5. insert-data
+6. create-table
+7. delete
+
+Note: 
+We take input in a dynamic way , like :
+input: I want to generate-password for my account.
+The above command still works, if you embed
+ the command with a sentence.

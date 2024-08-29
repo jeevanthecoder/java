@@ -1,6 +1,6 @@
 
 public class DLL {
-    class Node{
+    static class Node{
         int data;
         Node next,back;
         Node(int data,Node next,Node back){

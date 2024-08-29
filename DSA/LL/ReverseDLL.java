@@ -44,6 +44,7 @@ public class ReverseDLL {
 
     // optimal
    public static DLL.Node ReverseDLL_O(DLL.Node head){
+       if(head==null || head.next==null)return head;
        DLL.Node temp=head;
 
        DLL.Node prev=null;

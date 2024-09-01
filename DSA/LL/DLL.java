@@ -20,11 +20,11 @@ public class DLL {
         Node temp=head;
         while(temp!=null){
             System.out.print(temp.data+" -> ");
-            if(temp.next.next==null){
-                System.out.print(temp.next.data+" -> ");
-                temp=temp.next;
-                break;
-            }
+//            if(temp.next.next==null){
+//                System.out.print(temp.next.data+" -> ");
+//                temp=temp.next;
+//                break;
+//            }
             temp=temp.next;
 
         }

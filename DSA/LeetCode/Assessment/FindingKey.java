@@ -19,5 +19,6 @@ i++;
 
     public static void main(String[] args) {
         System.out.println(Key(3456,4569,8756));
+        System.out.println();
     }
 }
